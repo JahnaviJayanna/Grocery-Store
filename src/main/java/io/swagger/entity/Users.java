@@ -42,7 +42,6 @@ public class Users {
     private String msisdn = null;
 
     @Column(name = "DATE_OF_BIRTH", nullable = false)
-    @NotEmpty
     private Date dob = null;
 
     @Column(name = "STATUS")

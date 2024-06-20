@@ -28,7 +28,6 @@ public class Sales {
     private Users userId = null;
 
     @Column(name = "TOTAL_AMOUNT",nullable = false)
-    @NotEmpty
     private Float totalAmount = null;
 
     @Column(name = "TXN_ID", nullable = false)
