@@ -1,0 +1,4 @@
+io\swagger\api\V1ApiControllerTest.class
+io\swagger\api\UserServiceTest.class
+io\swagger\api\InventoryServiceTest.class
+io\swagger\api\V1ApiControllerTest$CustomDateConfig.class
