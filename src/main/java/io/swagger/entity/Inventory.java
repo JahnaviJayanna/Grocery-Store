@@ -2,6 +2,7 @@ package io.swagger.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,33 +32,34 @@ public class Inventory {
     @JoinColumn(name = "ITEM_TYPE_ID", referencedColumnName = "ITEM_TYPE_ID")
     private ItemTypes itemTypeId = null;
 
-    @Column(name = "ITEM_NAME", unique = true, updatable = false)
+    @Column(name = "ITEM_NAME", unique = true, updatable = false, nullable = false)
+    @NotEmpty
     private String itemName = null;
 
     @Column(name = "DESCRIPTION")
     private String description = null;
 
-    @Column(name = "PRICE")
+    @Column(name = "PRICE", nullable = false)
     private Float price = null;
 
-    @Column(name = "QUANTITY", length = 5)
+    @Column(name = "QUANTITY", length = 5, nullable = false)
     private Float quantity = null;
 
-    @Column(name = "UNIT")
+    @Column(name = "UNIT", nullable = false)
     private Integer unit = null;
 
-    @Column(name = "CREATED_BY")
+    @Column(name = "CREATED_BY", nullable = false)
     private String createdBy = null;
 
-    @Column(name = "MODIFIED_BY")
+    @Column(name = "MODIFIED_BY", nullable = false)
     private String modifiedBy = null;
 
     @DateTimeFormat(pattern = "DD-MM-YYYY[T]HH:mm:ss")
-    @Column(name = "CREATED_ON")
+    @Column(name = "CREATED_ON", nullable = false)
     private String createdOn = null;
 
     @DateTimeFormat(pattern = "DD-MM-YYYY[T]HH:mm:ss")
-    @Column(name = "MODIFIED_ON")
+    @Column(name = "MODIFIED_ON", nullable = false)
     private String modifiedOn = null;
 
     @Column(name = "STATUS")
