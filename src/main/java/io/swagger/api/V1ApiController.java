@@ -57,7 +57,7 @@ public class V1ApiController implements V1Api {
                                                                          HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         String bearerToken = authorization.substring("Bearer".length()).trim();
@@ -82,7 +82,7 @@ public class V1ApiController implements V1Api {
             , @Parameter(in = ParameterIn.QUERY, description = "Item name (optional, if provided filters the inventory based on item name)" ,schema=@Schema()) @RequestParam(value = "itemName", required = false) String itemName, HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         String bearerToken = authorization.substring("Bearer".length()).trim();
@@ -98,11 +98,11 @@ public class V1ApiController implements V1Api {
     }
 
 
-    public ResponseEntity<CreateUserSuccess> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "Created user object", schema=@Schema()) @Valid @RequestBody CreateUserPayload body, HttpServletRequest request
+    public ResponseEntity<CreateUserSuccess> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "Created user object", schema=@Schema()) @RequestBody CreateUserPayload body, HttpServletRequest request
 ) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         if (accept != null && accept.contains("application/json")) {
@@ -122,7 +122,7 @@ public class V1ApiController implements V1Api {
                                                                   HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         if (accept != null && accept.contains("application/json")) {
@@ -145,7 +145,7 @@ public class V1ApiController implements V1Api {
                                                         HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         if (accept != null && accept.contains("application/json")) {
@@ -168,7 +168,7 @@ public class V1ApiController implements V1Api {
                                                                   HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         String bearerToken = authorization.substring("Bearer".length()).trim();
@@ -192,7 +192,7 @@ public class V1ApiController implements V1Api {
                                                                 HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         String bearerToken = authorization.substring("Bearer".length()).trim();
@@ -226,7 +226,7 @@ public class V1ApiController implements V1Api {
                                                    HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         String bearerToken = authorization.substring("Bearer".length()).trim();
@@ -246,7 +246,7 @@ public class V1ApiController implements V1Api {
     public ResponseEntity<SellItemsSucess> sellItems(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @RequestBody @Valid SellItemsPayload body, HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         if (accept != null && accept.contains("application/json")) {
@@ -268,7 +268,7 @@ public class V1ApiController implements V1Api {
 
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
-        if(authorization == null){
+        if(authorization == null || authorization.isEmpty()){
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED.value(), "User token is required");
         }
         String bearerToken = authorization.substring("Bearer".length()).trim();
