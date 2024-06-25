@@ -99,7 +99,7 @@ public class V1ApiController implements V1Api {
     }
 
 
-    public ResponseEntity<CreateUserSuccess> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "Created user object", schema=@Schema()) @Valid @RequestBody CreateUserPayload body, HttpServletRequest request
+    public ResponseEntity<CreateUserSuccess> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "Created user object", schema=@Schema()) @RequestBody CreateUserPayload body, HttpServletRequest request
 ) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
