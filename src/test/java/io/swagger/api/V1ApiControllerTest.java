@@ -36,7 +36,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
@@ -708,7 +710,7 @@ public class V1ApiControllerTest {
     void testSellItems_Success() throws Exception {
         String validToken = "validToken";
         String bearerToken = "Bearer " + validToken;
-        SellItemsPayload payload = new SellItemsPayload();
+        SellItemsPayload payload = sellItemsPayload();
         SellItemsSucess mockResponse = new SellItemsSucess();
 
         when(jwtUtil.validateToken(validToken)).thenReturn(true);
@@ -727,7 +729,7 @@ public class V1ApiControllerTest {
     void testSellItems_UnauthorisedUser() throws Exception {
         String invalidToken = "invalidToken";
         String bearerToken = "Bearer " + invalidToken;
-        SellItemsPayload payload = new SellItemsPayload();
+        SellItemsPayload payload = sellItemsPayload();
 
         when(jwtUtil.validateToken(invalidToken)).thenReturn(false);
 
@@ -745,7 +747,7 @@ public class V1ApiControllerTest {
     void testSellItems_NotImplemented() throws Exception {
         String validToken = "validToken";
         String bearerToken = "Bearer " + validToken;
-        SellItemsPayload payload = new SellItemsPayload();
+        SellItemsPayload payload = sellItemsPayload();
 
         mockMvc.perform(post("/v1/sell/inventory")
                         .header(HttpHeaders.AUTHORIZATION, bearerToken)
@@ -756,7 +758,7 @@ public class V1ApiControllerTest {
 
     @Test
     void testSellItems_MissingAuthorizationHeader() throws Exception {
-        SellItemsPayload payload = new SellItemsPayload();
+        SellItemsPayload payload = sellItemsPayload();
 
         mockMvc.perform(post("/v1/sell/inventory")
                         .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
@@ -892,5 +894,16 @@ public class V1ApiControllerTest {
         itemDetails.setDescription("Latest model");
         payload.setItemDetails(Collections.singletonList(itemDetails));
         return payload;
+    }
+
+    private SellItemsPayload sellItemsPayload(){
+        SellItemsPayload sellItemsPayload = new SellItemsPayload();
+        List<SellItemsPayloadItems> sellItemsPayloadItems = new ArrayList<>();
+        SellItemsPayloadItems sellItemsPayloadItems1 = new SellItemsPayloadItems();
+        sellItemsPayloadItems1.setItemId("ITM009");
+        sellItemsPayloadItems1.setUnits(6);
+        sellItemsPayloadItems.add(sellItemsPayloadItems1);
+        sellItemsPayload.setItems(sellItemsPayloadItems);
+        return sellItemsPayload;
     }
 }

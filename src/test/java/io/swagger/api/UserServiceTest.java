@@ -406,7 +406,7 @@ public class UserServiceTest {
             userService.userLogout(logoutRequest, authorization);
         });
         assertEquals(HttpStatus.BAD_REQUEST.value(), exception.getStatusCode());
-        assertTrue(exception.getMessage().contains("Invalid credentials"));
+        assertTrue(exception.getMessage().contains("User is not present with user name"));
     }
 
     @Test
