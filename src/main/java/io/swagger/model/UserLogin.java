@@ -97,10 +97,8 @@ public class UserLogin   {
    **/
   @Schema(example = "password", description = "Password of user")
   @NotNull(message = "password is required")
-  @NotBlank(message = "Password is required")
-  @NotEmpty(message = "Password is required")
-  @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$", message = "Password should contain atleast one special character and alphabet")
-  @Size(min=6, max =15, message = "Password size should be between 6 and 15")
+  @NotEmpty(message = "Password must not be empty")
+  @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$", message = "Password should contain atleast one special character and alphabet of length 8 to 15")
   public String getPassword() {
     return password;
   }

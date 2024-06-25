@@ -32,8 +32,8 @@ public class UserLogout   {
   @Schema(example = "ADM753", description = "User Name of user")
   @NotNull(message = "User name is required")
   @NotEmpty(message = "User name is required")
-  @NotBlank(message = "User name is required")
-  @Pattern(regexp="^[A-Z]{3}\\d{3}$") @Size(min=6,max=6)   public String getUserName() {
+  @Pattern(regexp="^[A-Z]{3}\\d{3}$")
+  public String getUserName() {
     return userName;
   }
 

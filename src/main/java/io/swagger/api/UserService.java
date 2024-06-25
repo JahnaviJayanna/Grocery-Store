@@ -119,7 +119,8 @@ public class UserService implements Constants {
             }
             throw new UnauthorizedException(HttpStatus.BAD_REQUEST.value(), "User does not have privilege to perform action");
         }
-        throw new NotFoundException(HttpStatus.BAD_REQUEST.value(), "Invalid credentials");
+        throw new NotFoundException(HttpStatus.BAD_REQUEST.value(), "User is not present with user name" +
+                body.getUserName());
     }
 
     /**

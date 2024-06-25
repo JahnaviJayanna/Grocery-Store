@@ -71,7 +71,7 @@ public interface V1Api {
     @RequestMapping(value = "/v1/fetch/inventory",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<GetInventoryItemsSuccess> allInventoryListItems(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item (optional, if provided filters the inventory based on itemId)" ,schema=@Schema()) @Valid @RequestParam(value = "itemId", required = false) String itemId
+    ResponseEntity<GetInventoryItemsSuccess> allInventoryListItems(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item (optional, if provided filters the inventory based on itemId)" ,schema=@Schema()) @Valid @RequestParam(value = "itemId", required = false) @Pattern(regexp = "^[A-Z]{3}\\d{3}$")String itemId
 , @Parameter(in = ParameterIn.QUERY, description = "Name of the category of items (optional, if provided filters the inventory based on categoryName)" ,schema=@Schema()) @Valid @RequestParam(value = "categoryName", required = false) String categoryName
 , @Parameter(in = ParameterIn.QUERY, description = "Type of item (optional, if provided filters the inventory based on typeName)" ,schema=@Schema()) @Valid @RequestParam(value = "itemType", required = false) String itemType
 , @Parameter(in = ParameterIn.QUERY, description = "Item name (optional, if provided filters the inventory based on item name)" ,schema=@Schema()) @Valid @RequestParam(value = "itemName", required = false) String itemName
@@ -88,7 +88,7 @@ public interface V1Api {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<CreateUserSuccess> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "Created user object", schema=@Schema()) @RequestBody CreateUserPayload body, HttpServletRequest request
+    ResponseEntity<CreateUserSuccess> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "Created user object", schema=@Schema()) @Valid @RequestBody CreateUserPayload body, HttpServletRequest request
 ) throws ApiException;
 
 
@@ -109,7 +109,7 @@ public interface V1Api {
     @RequestMapping(value = "/v1/delete/inventory",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<DeleteInventorySuccess> deleteInventory(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item" ,schema=@Schema()) @Valid @RequestParam(value = "itemId", required = true) String itemId
+    ResponseEntity<DeleteInventorySuccess> deleteInventory(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item" ,schema=@Schema()) @NotEmpty @NotNull @Valid @RequestParam(value = "itemId", required = true) String itemId
 , HttpServletRequest request) throws ApiException;
 
 
@@ -142,7 +142,7 @@ public interface V1Api {
     @RequestMapping(value = "/v1/sell/inventory",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<SellItemsSucess> fecthSalesBasedOntxnId(@NotNull @Parameter(in = ParameterIn.QUERY, description = "txnId of which details needs to be fetched" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "txnId", required = true) String txnId
+    ResponseEntity<SellItemsSucess> fecthSalesBasedOntxnId(@NotNull @NotEmpty @Parameter(in = ParameterIn.QUERY, description = "txnId of which details needs to be fetched" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "txnId", required = true) String txnId
     , HttpServletRequest request) throws ApiException;
 
     @Operation(summary = "Fetch users", description = "Fetch all user details list if query param is not passed", security = {
@@ -154,7 +154,7 @@ public interface V1Api {
     @RequestMapping(value = "/v1/fetch/user",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<FetchUserDetailsSucess> fetchUserList(@Pattern(regexp="^[A-Z]{2}\\.\\d{13}$") @Parameter(in = ParameterIn.QUERY, description = "Id of staff user to fetch if provided" ,schema=@Schema()) @Valid @RequestParam(value = "userId", required = false) String userId
+    ResponseEntity<FetchUserDetailsSucess> fetchUserList( @Pattern(regexp="^[A-Z]{2}\\.\\d{13}$") @Parameter(in = ParameterIn.QUERY, description = "Id of staff user to fetch if provided" ,schema=@Schema()) @Valid @RequestParam(value = "userId", required = false) String userId
 , HttpServletRequest request) throws ApiException;
 
 
@@ -226,7 +226,7 @@ public interface V1Api {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    ResponseEntity<AddUpdateInventorySuccess> updateInventory(@Parameter(in = ParameterIn.PATH, description = "Id of inventory item", required=true, schema=@Schema()) @Valid @PathVariable("itemId") String itemId
+    ResponseEntity<AddUpdateInventorySuccess> updateInventory(@Parameter(in = ParameterIn.PATH, description = "Id of inventory item", required=true, schema=@Schema()) @Valid @PathVariable("itemId") @Pattern(regexp = "^[A-Z]{3}\\d{3}$") @NotEmpty @NotNull String itemId
 , @Parameter(in = ParameterIn.DEFAULT, description = "Update inventory items", required=true, schema=@Schema()) @Valid @RequestBody UpdateInventoryItemsPayload body
 , HttpServletRequest request) throws ApiException;
 

@@ -7,15 +7,17 @@ import io.swagger.model.SellItemsPayloadItems;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.*;
 
 /**
  * SellItemsPayload
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-05-29T17:15:54.887590953Z[GMT]")
+@jakarta.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-05-29T17:15:54.887590953Z[GMT]")
 
 
 public class SellItemsPayload   {
@@ -41,7 +43,8 @@ public class SellItemsPayload   {
    * @return items
    **/
   @Schema(description = "")
-  @NotNull
+  @NotNull(message = "Item list is required")
+  @NotEmpty(message = "Item list cannot be empty")
   @Valid
   public List<SellItemsPayloadItems> getItems() {
     return items;

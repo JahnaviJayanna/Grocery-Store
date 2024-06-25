@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -67,6 +68,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
         logger.error("ExpiredJwtException", ex);
+        List<ResponseErrors>  errorList = new ArrayList<>();
+        ErrorResponse errors = commonErrorResponseFields();
+        ResponseErrors errorMsg = new ResponseErrors();
+        errorMsg.setCode("token.invalid");
+        errorMsg.setMessage("Token is invalid");
+        errorList.add(errorMsg);
+        errors.setErrorUserMsg("Token is invalid");
+        errors.setErrors(errorList);
+        return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ErrorResponse> handleSignatureException(SignatureException ex) {
+        logger.error("SignatureException", ex);
         List<ResponseErrors>  errorList = new ArrayList<>();
         ErrorResponse errors = commonErrorResponseFields();
         ResponseErrors errorMsg = new ResponseErrors();
@@ -131,7 +146,7 @@ public class GlobalExceptionHandler {
         errorList.add(errorMsg);
         errors.setErrorUserMsg("Invalid JWT token");
         errors.setErrors(errorList);
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

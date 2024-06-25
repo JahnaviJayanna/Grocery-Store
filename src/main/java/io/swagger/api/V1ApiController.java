@@ -76,10 +76,11 @@ public class V1ApiController implements V1Api {
         return new ResponseEntity<AddUpdateInventorySuccess>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<GetInventoryItemsSuccess> allInventoryListItems(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item (optional, if provided filters the inventory based on itemId)" ,schema=@Schema()) @RequestParam(value = "itemId", required = false) String itemId
-            , @Parameter(in = ParameterIn.QUERY, description = "Name of the category of items (optional, if provided filters the inventory based on categoryName)" ,schema=@Schema()) @RequestParam(value = "categoryName", required = false) String categoryName
-            , @Parameter(in = ParameterIn.QUERY, description = "Type of item (optional, if provided filters the inventory based on typeName)" ,schema=@Schema()) @RequestParam(value = "itemType", required = false) String itemType
-            , @Parameter(in = ParameterIn.QUERY, description = "Item name (optional, if provided filters the inventory based on item name)" ,schema=@Schema()) @RequestParam(value = "itemName", required = false) String itemName, HttpServletRequest request) throws ApiException {
+    public ResponseEntity<GetInventoryItemsSuccess> allInventoryListItems(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item (optional, if provided filters the inventory based on itemId)" ,schema=@Schema()) @RequestParam(value = "itemId", required = false) @Valid @Pattern(regexp = "^[A-Z]{3}\\d{3}$") String itemId
+            , @Parameter(in = ParameterIn.QUERY, description = "Name of the category of items (optional, if provided filters the inventory based on categoryName)" ,schema=@Schema()) @Valid @RequestParam(value = "categoryName", required = false) String categoryName
+            , @Parameter(in = ParameterIn.QUERY, description = "Type of item (optional, if provided filters the inventory based on typeName)" ,schema=@Schema()) @Valid @RequestParam(value = "itemType", required = false) String itemType
+            , @Parameter(in = ParameterIn.QUERY, description = "Item name (optional, if provided filters the inventory based on item name)" ,schema=@Schema()) @Valid @RequestParam(value = "itemName", required = false) String itemName
+            , HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
         if(authorization == null){
@@ -118,8 +119,8 @@ public class V1ApiController implements V1Api {
         return new ResponseEntity<CreateUserSuccess>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<DeleteInventorySuccess> deleteInventory(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item" ,schema=@Schema()) @Valid String itemId,
-                                                                  HttpServletRequest request) throws ApiException {
+    public ResponseEntity<DeleteInventorySuccess> deleteInventory(@Parameter(in = ParameterIn.QUERY, description = "Id of the inventory item" ,schema=@Schema()) @NotEmpty @NotNull @Valid @RequestParam(value = "itemId", required = true) String itemId
+            , HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
         if(authorization == null){
@@ -164,7 +165,7 @@ public class V1ApiController implements V1Api {
         return new ResponseEntity<DeleteUserSuccess>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<SellItemsSucess> fecthSalesBasedOntxnId(@Parameter(in = ParameterIn.QUERY, description = "txnId of which details needs to be fetched" ,required=true,schema=@Schema()) @NotNull @Valid String txnId,
+    public ResponseEntity<SellItemsSucess> fecthSalesBasedOntxnId(@Parameter(in = ParameterIn.QUERY, description = "txnId of which details needs to be fetched" ,required=true,schema=@Schema()) @NotNull @NotEmpty @Valid String txnId,
                                                                   HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
@@ -188,8 +189,8 @@ public class V1ApiController implements V1Api {
         return new ResponseEntity<SellItemsSucess>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<FetchUserDetailsSucess> fetchUserList(@Parameter(in = ParameterIn.QUERY, description = "Id of staff user to fetch if provided" ,schema=@Schema()) @Pattern(regexp = "^[A-Z]{2}\\.\\d{13}$") @Valid String userId,
-                                                                HttpServletRequest request) throws ApiException {
+    public ResponseEntity<FetchUserDetailsSucess> fetchUserList( @Parameter(in = ParameterIn.QUERY, description = "Id of staff user to fetch if provided" ,schema=@Schema()) @RequestParam(value = "userId", required = false) @Pattern(regexp = "^[A-Z]{2}\\.\\d{13}$") @Valid String userId
+            , HttpServletRequest request) throws ApiException {
         String accept = request.getHeader("Accept");
         final String authorization = request.getHeader("Authorization");
         if(authorization == null){
@@ -262,7 +263,7 @@ public class V1ApiController implements V1Api {
     }
 
 
-    public ResponseEntity<AddUpdateInventorySuccess> updateInventory(@Parameter(in = ParameterIn.PATH, description = "Id of inventory item", required=true, schema=@Schema()) @PathVariable("itemId") @Valid String itemId
+    public ResponseEntity<AddUpdateInventorySuccess> updateInventory(@Parameter(in = ParameterIn.PATH, description = "Id of inventory item", required=true, schema=@Schema()) @PathVariable("itemId") @Valid @Pattern(regexp = "^[A-Z]{3}\\d{3}$") @NotEmpty @NotNull String itemId
             , @Parameter(in = ParameterIn.DEFAULT, description = "Update inventory items", required=true, schema=@Schema()) @RequestBody @Valid UpdateInventoryItemsPayload body,
                                                                      HttpServletRequest request) throws ApiException {
 

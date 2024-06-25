@@ -85,8 +85,7 @@ public class InventoryService {
      * @return the success response of adding or updating inventory
      */
     @Transactional
-    public AddUpdateInventorySuccess createItemsToInventory(
-            @Valid InventoryItemDetailsPayload body, String userName) {
+    public AddUpdateInventorySuccess createItemsToInventory(InventoryItemDetailsPayload body, String userName) {
         try {
             logger.info("Creating items to inventory for user: {}", userName);
 
@@ -160,7 +159,7 @@ public class InventoryService {
      */
     @Transactional
     public DeleteInventorySuccess deleteItem(
-            @NotNull @NotEmpty @Valid @RequestParam(value = "itemId", required = true) String itemId)
+            String itemId)
             throws ApiException {
 
         Optional<Inventory> inventory = inventoryRepository.findById(itemId);
@@ -196,10 +195,10 @@ public class InventoryService {
      * @throws ApiException if any error occurs
      */
     public GetInventoryItemsSuccess fetchInventoryList(
-            @Valid String itemId,
-            @Valid String itemName,
-            @Valid String itemType,
-            @Valid String categoryName,
+            String itemId,
+            String itemName,
+            String itemType,
+            String categoryName,
             String workspace) throws ApiException {
         List<Inventory> inventoryList = inventoryRepository.findAll();
 
@@ -297,7 +296,7 @@ public class InventoryService {
      */
     @Transactional
     public AddUpdateInventorySuccess updateItemsInInventory(String itemId,
-                                                            @Valid UpdateInventoryItemsPayload body,
+                                                            UpdateInventoryItemsPayload body,
                                                             String userName) throws ApiException {
         // Fetch the inventory item by ID
         Inventory itemDetails = inventoryRepository.findById(itemId)
@@ -346,7 +345,7 @@ public class InventoryService {
      * @throws ApiException if an error occurs during the selling process
      */
     @Transactional
-    public SellItemsSucess sellItems(@Valid SellItemsPayload body, String userName) throws ApiException {
+    public SellItemsSucess sellItems(SellItemsPayload body, String userName) throws ApiException {
 
         // Fetch Inventory items
         Set<String> itemIds = body.getItems().stream()
@@ -445,7 +444,7 @@ public class InventoryService {
         SellItemsSucess response = new SellItemsSucess();
         response.setServiceRequestId(responseUtil.generateRequestId());
         response.setTransactionTimeStamp(responseUtil.formatDateInGivenFormat("yyyy-MM-dd'T'HH:mm:ss"));
-        response.setMessage("User Creation successful");
+        response.setMessage("Sales successful");
         response.setStatus("SUCCEEDED");
         response.setTransactionId(txnId);
         response.setSalesDetails(salesDetails);
@@ -479,7 +478,7 @@ public class InventoryService {
      * @return the success response containing sales details for the given transaction ID
      * @throws ApiException if the transaction ID is not found or an error occurs during fetching
      */
-    public SellItemsSucess fetchSalesDetails(@RequestParam(value = "txnId", required = true) @NotNull @NotEmpty @Valid String txnId) throws ApiException {
+    public SellItemsSucess fetchSalesDetails(String txnId) throws ApiException {
         // Check if the Sales ID exists
         Optional<Sales> salesOptional = salesRepository.findByTxnId(txnId);
         if (!salesOptional.isPresent()) {

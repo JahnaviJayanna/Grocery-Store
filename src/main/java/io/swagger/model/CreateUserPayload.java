@@ -143,7 +143,6 @@ public class CreateUserPayload   {
   @Schema(example = "ADM753", description = "User Name for user")
   @NotNull(message = "userName is required")
   @NotEmpty(message = "UserName must not be empty")
-  @NotBlank(message = "UserName must not be empty")
   @Pattern(regexp="^[A-Z]{3}\\d{3}$", message = "Invalid value for UserName") @Size(min=6,max=6)   public String getUserName() {
     return userName;
   }
@@ -164,7 +163,6 @@ public class CreateUserPayload   {
   @Schema(example = "12345", description = "User account password")
   @NotNull(message = "password is required")
   @NotEmpty(message = "Password must not be empty")
-  @NotBlank(message = "Password must not be empty")
   @Pattern(regexp="^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$", message = "Password does not meet requirement, should contain atleast one alphabet, number and special character of minimum length 8")
   public String getPassword() {
     return password;

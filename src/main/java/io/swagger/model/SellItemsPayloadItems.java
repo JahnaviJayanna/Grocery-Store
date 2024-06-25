@@ -33,8 +33,9 @@ public class SellItemsPayloadItems   {
      **/
     @Schema(example = "ITM736", description = "System generated id for added item")
     @NotNull
-    @NotBlank
-    @Pattern(regexp="^[A-Z]{3}\\d{3}$") @Size(min=3,max=10)   public String getItemId() {
+    @NotEmpty
+    @Pattern(regexp="^[A-Z]{3}\\d{3}$") @Size(min=3,max=10)
+    public String getItemId() {
         return itemId;
     }
 
@@ -53,8 +54,6 @@ public class SellItemsPayloadItems   {
      **/
     @Schema(example = "5", description = "Number of units available for each item")
     @NotNull
-    @NotEmpty
-    @NotBlank
     public Integer getUnits() {
         return units;
     }
