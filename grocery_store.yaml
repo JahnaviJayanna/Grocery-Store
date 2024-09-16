@@ -1,0 +1,1110 @@
+openapi: 3.0.3
+info:
+  title: Grocery Store Application
+  description: This is a Grocery Store Documentation based on the OpenAPI 3.0 specification.
+  version: 1.0.0
+servers:
+- url: https://grocerystore.swagger.io/api
+tags:
+- name: Inventory
+  description: Find Inventory details
+- name: Admin
+  description: Manages the inventory of grocery store
+- name: Staff
+  description: Makes sales of items present in inventory
+- name: Sales
+  description: Makes sales of items present in inventory
+paths:
+  /v1/create/inventory:
+    post:
+      tags:
+      - Admin
+      summary: Add items to inventory
+      security:
+        - bearerAuthentication: [ ]
+      description: API to add new item to inventory with all required details
+      operationId: addItemsToInventory
+      requestBody:
+        description: Add the details of items to inventory
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItemDetailsPayload'
+        required: true
+      responses:
+        "200":
+          description: Successfull addtion of new items to inventory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUpdateInventorySuccess'
+        '400':
+          description: Error while adding items to inventory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '406':
+          description: Acceptance error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceError'
+  /v1/fetch/inventory:
+    get:
+      tags:
+      - Admin
+      - Staff
+      summary: List of items present in inventory
+      security:
+        - bearerAuthentication: [ ]
+      description: This will fetch list of all items added to inventory.
+      operationId: allInventoryListItems
+      parameters:
+        - name: itemId
+          in: query
+          description: Id of the inventory item (optional, if provided filters the inventory based on itemId)
+          required: false
+          schema:
+            type: string
+        - name: categoryName
+          in: query
+          description: Name of the category of items (optional, if provided filters the inventory based on categoryName)
+          required: false
+          schema:
+            type: string
+        - name: itemType
+          in: query
+          description: Type of item (optional, if provided filters the inventory based on typeName)
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfull retrival of list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInventoryItemsSuccess'
+        '400':
+          description: Error while fetching list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '406':
+          description: Acceptance error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceError'
+  /v1/delete/inventory:
+    delete:
+      tags:
+      - Admin
+      summary: Delete inventory item
+      security:
+        - bearerAuthentication: [ ]
+      description: Delete inventory based on itemId
+      operationId: deleteInventory
+      parameters:
+        - name: itemId
+          in: query
+          description: Id of the inventory item (optional, if provided filters the inventory based on name)
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfull deletion of item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteInventorySuccess'
+        '400':
+          description: Error while fetching list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '406':
+          description: Acceptance error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceError'
+  /v1/update/inventory/{itemId}:
+    put:
+      tags:
+      - Admin
+      summary: Update inventory item details
+      security:
+        - bearerAuthentication: [ ]
+      description: Updates quantity, price and status of inventory details
+      operationId: updateInventory
+      parameters:
+      - name: itemId
+        in: path
+        description: Id of inventory item
+        required: true
+        schema:
+          type: string
+          pattern : ^[A-Z]{3}\d{3}$
+      requestBody:
+        description: Update inventory items
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInventoryItemsPayload'
+        required: true
+      responses:
+        "200":
+          description: Successfull Updation of inventory items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddUpdateInventorySuccess'
+        '400':
+          description: Error while fetching list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+  /v1/sell/inventory:
+    post:
+      tags:
+      - Sales
+      summary: Sell inventory items
+      security:
+        - bearerAuthentication: [ ]
+      description: API for staff to sell items present in inventory
+      operationId: sellItems
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SellItemsPayload'
+      responses:
+        "200":
+          description: Successfull sale of item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SellItemsSucess'
+        '400':
+          description: Error while selling items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+    get:
+      tags:
+      - Sales
+      summary: List of items sold based on salesId
+      security:
+        - bearerAuthentication: [ ]
+      description: This will fetch list of all item details Sold based on salesId.
+      operationId: fecthSalesBasedOnSalesID
+      parameters:
+        - name: salesId
+          in: query
+          description: SalesId of which details needs to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfull retrival of list of all items sold
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SellItemsSucess'
+        '400':
+          description: Error while fetching list of all items sold
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+  /v1/create/user:
+    post:
+      tags:
+      - Admin
+      summary: Create user
+      description: User details are added.
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserPayload'
+      responses:
+        "200":
+          description: Successfully created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserSuccess'
+        '400':
+          description: Error while logging in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+  /v1/fetch/user:
+    get:
+      tags:
+      - Admin
+      - Staff
+      summary: Fetch users
+      security:
+        - bearerAuthentication: [ ]
+      description: Fetch all user details list if query param is not passed
+      operationId: fetchUserList
+      parameters:
+        - name: userId
+          in: query
+          description: Id of staff user to fetch if provided
+          required: false
+          schema:
+            type: string
+            description : System Generated userId
+            pattern : ^[A-Z]{2}\.\d{13}$
+            example : US.1234
+      responses:
+        "200":
+          description: Successfull retrival of staff user
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/FetchUserDetailsSucess'
+        '400':
+          description: Error while fetching user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+  /v1/delete/user:
+    delete:
+      tags:
+      - Admin
+      summary: Delete  user
+      security:
+        - bearerAuthentication: [ ]
+      description: Delete  user based on userId
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: query
+          description: Id of user to deleted
+          required: true
+          schema:
+            type: string
+            description : System Generated userId
+            pattern : ^[A-Z]{2}\.\d{13}$
+            example : US.123423456523
+      responses:
+        "200":
+          description: Successfull deletion of user
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/DeleteInventorySuccess'
+        '400':
+          description: Error while deleting user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+  /v1/user/login:
+    post:
+      tags:
+      - Admin
+      - Staff
+      description: Logs user into the system
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        "200":
+          description: Successfull user login 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSucess'
+        '400':
+          description: Error while logging in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorised Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorisedError'
+  /v1/user/logout:
+    post:
+      tags:
+      - Admin
+      - Staff
+      description: Logs out current logged in user session
+      security:
+        - bearerAuthentication: [ ]
+      operationId: logoutUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogout'
+      responses:
+        "200":
+          description: Successfull user logout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutSucess'
+        '400':
+          description: Error while fetching list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuthentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Must pass JWT in HTTP Header
+  schemas:
+    ItemDetails:
+      type : object
+      required: 
+        - itemName
+        - price
+        - quantity
+        - units
+      description : Details of items to be added
+      properties : 
+        itemName:
+          type: string
+          description : Name of item which needs to be added
+          example: Nescafe
+          minLength: 1
+          maxLength: 80
+        price:
+          type: number
+          description : Price of item in INR
+          format: float
+          example: 45.00
+          minLength : 1
+          maxLength : 20
+        quantity : 
+          type : number
+          format : float
+          description : Quantity of item in terms of ltrs or kilograms
+          example : 0.5
+        units : 
+          type : integer
+          description : Number of units available for each item
+          format : int32
+          example : 5
+    Dairy:
+      type: string
+      description : Applicable item types when category is Dairy
+      enum : 
+      - Milk
+      - Cheese
+      - Yogurt
+      - Butter
+      example : Milk
+    GrainsAndCereals:
+      type: string
+      description : Applicable item types when category is Grains And Cereals
+      enum : 
+      - White rice
+      - Brown Rice
+      - Basmati rice
+      - Wheat
+      - Millet
+      - Chickpeas
+      - Mung Beans
+      example : White rice
+    Snacks:
+      type: string
+      description : Applicable item types when category is Snacks
+      enum : 
+      - Chips
+      - Crackers
+      - Nuts
+      - Popcorn
+      example : Chips
+    Beverages:
+      type: string
+      description : Applicable item types when category is Beverages
+      enum : 
+      - Soft drinks
+      -  Juice
+      -  Water
+      -  Tea
+      -  Coffee
+      example : Soft drinks
+    CandyAndSweets:
+      description : Applicable item types when category is Candy And Sweets
+      type: string
+      enum : 
+      - Chocolate bars
+      - Candy
+      example : Chocolate bars
+    PersonalCare:
+      type: string
+      description : Applicable item types when category is Personal Care
+      enum : 
+      - Shampoo
+      - Soap
+      - Deodorant
+      example : Shampoo
+    HouseHoldAndCleaning:
+      description : Applicable item types when category is Household And Cleaning
+      type: string
+      enum : 
+      - Cleaning supplies
+      - Trash bags
+      example : Cleaning supplies
+    InventoryItemDetailsPayload:
+      title : InventoryItemDetailsPayload
+      required :
+      - categoryName
+      - itemType
+      - itemDetails
+      type: object
+      description : Request payload to add new items
+      properties:
+        categoryName:
+          type: string
+          description : category under which items can be classified
+          enum : 
+            - Dairy
+            - Grains and Cereals
+            - Snacks
+            - Beverages
+            - Candy and Sweets
+            - Household and Cleaning
+            - Personal Care
+          example: Beverages
+        itemType:
+          type: string
+          description : Item type under which items can be added
+          oneOf:
+            - $ref: '#/components/schemas/Dairy'
+            - $ref: '#/components/schemas/GrainsAndCereals'
+            - $ref: '#/components/schemas/Snacks'
+            - $ref: '#/components/schemas/Beverages'
+            - $ref: '#/components/schemas/CandyAndSweets'
+            - $ref: '#/components/schemas/HouseHoldAndCleaning'
+            - $ref: '#/components/schemas/PersonalCare'
+        itemDetails : 
+          type : array
+          description : Details of items to be added
+          items : 
+            $ref: '#/components/schemas/ItemDetails'
+    ItemDetail:
+      title: ItemDetail
+      required:
+        - itemId
+        - itemName
+      type: object
+      properties:
+        itemId:
+          type: string
+          description: System generated id for added item
+          pattern : ^[A-Z]{3}\d{3}$
+          example: GS2736
+          minLength : 3
+          maxLength : 10
+        itemName:
+          type: string
+          description : Name of item which needs to be added
+          example: Nescafe
+          minLength: 1
+          maxLength: 80
+        createdOn : 
+          type: string
+          description: The timestamp when the item is added
+          example: "2024-05-14T18:48:21"
+        modifiedOn : 
+          type: string
+          description: The timestamp when the item is updated
+          example: "2024-05-14T18:48:21"
+      description: Name and Id of item added
+    ResponseParams :
+      type : object
+      description : Response succesfull user creation
+      required :
+        - serviceRequestId
+        - message
+        - status
+        - transactionTimeStamp
+      properties:
+        serviceRequestId:
+          type: string
+          description: System Generated Unique Id 
+          example: f491f6b1-aa9b-43de-93b0-c85eda706a2c
+        transactionTimeStamp:
+          type: string
+          description: The timestamp when the event occurred
+          example: "2024-05-14T18:48:21"
+        message :
+          type: string
+          description: Message on action performed
+          example: User Creation successfull
+        status:
+          type: string
+          description: 'Status of request'
+          enum : 
+            - SUCCEEDED
+            - FAILED
+          example: SUCCEEDED
+    AddUpdateInventorySuccess:
+      title : AddUpdateInventorySuccess
+      allOf : 
+        - $ref: '#/components/schemas/ResponseParams'
+        - type : object
+      description : response body for updating inventory details
+      required :
+        - serviceRequestId
+        - message
+        - items
+        - status
+      properties:
+        items : 
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemDetail'
+          description : List of items added to inventory
+    UpdateInventoryItemsPayload : 
+      title : UpdateInventoryItems
+      description : Update item details present in inventory
+      type : object
+      properties : 
+        itemDetails : 
+          type : object
+          description : Details of items to be added
+          $ref: '#/components/schemas/ItemDetails'
+    DeleteInventorySuccess:
+      title : DeleteInventorySuccess
+      allOf : 
+        - $ref: '#/components/schemas/ResponseParams'
+        - type : object
+      required :
+        - serviceRequestId
+        - message
+        - status
+        - itemId
+      properties:
+        itemId:
+          type: string
+          description: Item id for deleted item
+          pattern : ^[A-Z]{3}\d{3}$
+          example: GS2736
+          minLength : 3
+          maxLength : 10
+    ItemDetailsWithId:
+      allOf : 
+        - $ref: '#/components/schemas/ItemDetails'
+        - type : object
+      description : Details of items sold
+      required:
+        - itemId
+      properties :
+        itemId:
+          type: string
+          description: System generated id for added item
+          pattern : ^[A-Z]{3}\d{3}$
+          example: GS2736
+          minLength : 3
+          maxLength : 10
+    GetInventoryItemsSuccess : 
+      title : GetInventoryItemsSuccess
+      allOf : 
+        - $ref: '#/components/schemas/ResponseParams'
+        - type : object
+      required :
+        - inventoryList
+      description : Response of inventory items list
+      properties :
+        inventoryList : 
+          type : array
+          description : List of items present in inventory
+          items :
+            type : object
+            properties :
+              categoryName :
+                type : string
+                description : Category of which item belongs
+                example : Beverages
+              categoryList :
+                type : array
+                description : List of item types present in inventory
+                items :
+                  type : object
+                  properties :
+                    itemType :
+                      type : string
+                      description : Type which item belongs
+                      example : Beverages
+                    itemsList : 
+                      type : array 
+                      description : List of item under specified category and name
+                      items :
+                        $ref: '#/components/schemas/ItemDetailsWithId'
+    SellItemsPayload:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            description : Request body to sell items
+            required : 
+              - itemId
+              - quantity
+              - units
+            properties:
+              itemId:
+                type: string
+                description: System generated id for added item
+                pattern : ^[A-Z]{3}\d{3}$
+                example: ITM736
+                minLength : 3
+                maxLength : 10
+              quantity : 
+                type : number
+                format : float
+                description : Quantity of item in terms of ltrs or kilograms
+                example : 0.5
+              units : 
+                type : integer
+                description : Number of units available for each item
+                format : int32
+                example : 5
+    SellItemsSucess:
+      title : SellItemsSucess
+      allOf : 
+        - $ref: '#/components/schemas/ResponseParams'
+        - type : object
+      description : Response for successfull sales for item
+      required :
+        - transactionId
+        - salesDetails
+      properties:
+        transactionId:
+          type: string
+          description: The unique identifier for the transaction
+          example: PP201012.1345
+        salesDetails :
+          type : object
+          description : List items sold with amount
+          properties : 
+            itemsList : 
+              type : array
+              items: 
+                $ref: '#/components/schemas/ItemDetailsWithId'
+            totalAmount :
+              type : number
+              format : float
+              description : Total amount of items sold
+    CreateUserPayload:
+      type: object
+      description : Create user request body
+      required :
+        - firstName
+        - emailId
+        - userName
+        - password
+        - phone
+        - userRole
+      properties:
+        firstName:
+          type: string
+          description : First name of user
+          pattern : ^[a-zA-Z]$
+          example: John
+        lastName:
+          type: string
+          description : Last name of user
+          pattern : ^[a-zA-Z]$
+          example: James
+        emailId:
+          type: string
+          description : Email id of user
+          pattern : ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          example: john@email.com
+        userName:
+          type: string
+          description : User Name for user
+          pattern : ^[A-Z]{3}\d{3}$
+          example: ADM753
+          minLength : 6
+          maxLength : 6
+        password:
+          type: string
+          description : User account password
+          pattern : ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$
+          example: "12345"
+        msisdn:
+          type: string
+          description : Mobile number of user
+          pattern : ^[0-9]$
+          minLength : 10
+          maxLength : 13
+          example: "1234567899"
+        dob:
+          type: string
+          description: User dob
+          example: 12/05/2002
+        userRole :
+          type: string
+          description : WOrspace to which user wants to login
+          enum :
+            - ADMIN
+            - STAFF
+          example: ADMIN
+    CreateUserSuccess: 
+      allOf : 
+        - $ref: '#/components/schemas/ResponseParams'
+        - type : object
+      description : Response succesfull user creation
+      required :
+        - userName
+        - userId
+      properties:
+        userName:
+          type: string
+          description : User Name of user
+          pattern : ^[A-Z]{3}\d{3}$
+          example: ADM753
+          minLength : 6
+          maxLength : 6
+        userId :
+          type : string
+          description : System Generated userId
+          pattern : ^[A-Z]{2}\.\d{13}$
+          example : US.1234
+    FetchUserDetailsSucess:
+      allOf : 
+        - $ref: '#/components/schemas/ResponseParams'
+        - type : object
+      description : Response succesfull user creation
+      required :
+        - userDetails
+      properties:
+        userDetails:
+          type : array
+          items:
+            required :
+            - status
+            allOf:
+              - $ref: '#/components/schemas/CreateUserPayload'
+              - type: object
+                properties: 
+                  status :
+                    type : string
+                    description: Status of user
+                    example: Y
+                    enum :
+                      - Y
+                      - N
+    UserLogin:
+      type: object
+      description : Request body for user login
+      required :
+        - userName
+        - password
+        - userRole
+      properties:
+        userName:
+          type: string
+          description : User Name of user
+          pattern : ^[A-Z]{3}\d{3}$
+          example: ADM753
+          minLength : 6
+          maxLength : 6
+        password:
+          type: string
+          description : Password of user
+          example: password
+          minLength : 6
+          maxLength : 15
+        userRole :
+          type: string
+          description : WOrspace to which user wants to login
+          enum :
+            - ADMIN
+            - STAFF
+          example: ADMIN
+    UserLogout:
+      type: object
+      description : Request body for user logout
+      required :
+        - userName
+      properties:
+        userName:
+          type: string
+          description : User Name of user
+          pattern : ^[A-Z]{3}\d{3}$
+          example: ADM753
+          minLength : 6
+          maxLength : 6
+    LoginSucess:
+      type: object
+      description : Success response for login
+      required :
+        - accessToken
+        - message
+        - status
+      properties:
+        accessToken:
+          type: string
+          description : Accesstoken generated for user
+          example : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        transactionTimeStamp:
+          type: string
+          description: The timestamp when the event occurred
+          example: "2024-05-14T18:48:21"
+        message :
+          type: string
+          description: Message on action performed
+          example: User login successfull
+        userId : 
+          type : string
+          description : Syatem generated userId
+          example : US.1234
+        status:
+          type: string
+          description: 'Status of request'
+          enum : 
+            - SUCCEEDED
+            - FAILED
+          example: SUCCEEDED
+    LogoutSucess:
+      type: object
+      description : Success response for logout
+      required :
+        - userName
+        - message
+        - status
+      properties:
+        userName:
+          type: string
+          description : User id of user
+          pattern : ^[A-Z]{3}\d{3}$
+          example: ADM753
+          minLength : 6
+          maxLength : 6
+        transactionTimeStamp:
+          type: string
+          description: The timestamp when the event occurred
+          example: "2024-05-14T18:48:21"
+        message :
+          type: string
+          description: Message on action performed
+          example: User login successfull
+        status:
+          type: string
+          description: 'Status of request'
+          enum : 
+            - SUCCEEDED
+            - FAILED
+          example: SUCCEEDED
+    InternalServerError:
+      type: object
+      properties:
+        error:
+          type: "string"
+          maxLength: 25
+          example: "Internal server error"
+          pattern: "^[A-Z0-9]{3,25}$"
+    UnauthorisedError:
+      type: object
+      properties:
+        error:
+          type: "string"
+          maxLength: 25
+          example: "Unauthorized error"
+          pattern: "^[A-Z0-9]{3,25}$"
+    ForbiddenError:
+      type: object
+      properties:
+        error:
+          type: "string"
+          maxLength: 25
+          example: "Forbidden error"
+          pattern: "^[A-Z0-9]{3,25}$"
+    AcceptanceError:
+      type: object
+      properties:
+        error:
+          type: "string"
+          maxLength: 25
+          example: "Not Acceptable client error"
+          pattern: "^[A-Z0-9]{3,25}$"
+    ErrorResponse:
+      title: ErrorResponse
+      allOf : 
+        - $ref: '#/components/schemas/ResponseParams'
+        - type : object
+      required:
+        - errorUserMsg
+        - httpErrorCode
+        - errors
+        - transactionId
+      properties:
+        errorUserMsg:
+          type: string
+          description: Generic error message
+          example: Bad request
+        httpErrorCode:
+          type: string
+          example: "400"
+          description: HTTP error code
+        errors:
+          type: array
+          maxItems: 5
+          description: Errors list.
+          example:
+            - code: Error code
+              message: Error Message
+          items:
+            $ref: '#/components/schemas/ResponseErrors'
+        transactionId:
+          type: string
+          description: 'The unique identifier for the transaction'
+          example: PP201012.1345.A65040
+      description: Representing a Error Response for all transactions.
+    ResponseErrors:
+      title: ResponseErrors
+      required:
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 20
+          description: Error Code
+          example: invalid.value
+        message:
+          type: string
+          maxLength: 100
+          description: Error message
+          example: Values passed are invalid
+      description: Error response message
