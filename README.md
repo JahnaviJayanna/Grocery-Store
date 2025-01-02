@@ -8,7 +8,7 @@ This API allows you to manage the inventory of a grocery store, including adding
 
 ## Description
 
-This API provides various endpoints for managing inventory and sales in a grocery store application. It supports operations like adding items to inventory, listing items, updating items, selling items, and managing user accounts. It has system generated list of categoryName and ItemTypes for each category where admin user can add Items to inventory for correct combination of CategoryName and ItemType values. Staff users will be able to Sale the items present in inventory.
+This API provides various endpoints for managing inventory and sales in a grocery store application. It supports operations like adding items to inventory, listing items, updating items, selling items, and managing user accounts. It has system generated list of categoryName and ItemTypes for each category where admin user can add Items to inventory for correct combination of CategoryName and ItemType values. Staff users will be able to Sell the items present in inventory.
 
 ## Authentication
 
